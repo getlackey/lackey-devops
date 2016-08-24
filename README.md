@@ -50,5 +50,6 @@ MIT
 ### Inspiration:
 
 - [Discourse](http://www.discourse.org/)
-- [ansible-role-mysql](https://github.com/geerlingguy/ansible-role-mysql)
+- [geerlingguy/ansible-role-mysql](https://github.com/geerlingguy/ansible-role-mysql)
+- [infOpen/ansible-role-vagrant](https://github.com/infOpen/ansible-role-vagrant)
 
