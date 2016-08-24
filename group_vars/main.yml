@@ -1,0 +1,77 @@
+---
+nginx_port: 8080
+
+csf_allow_domains: |
+  registry.npmjs.org
+  github.com
+  bitbucket.org
+
+#########################
+# Firewall
+#########################
+tcp_in: "22,53,80,443,5666,27017"
+tcp6_in: "22,53,80,443,5666,27017"
+
+# http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
+# 53 - DNS
+# 80 - HTTP HAProxy
+# 443 - HTTPS
+# 5666 - Nagios
+# 3306 - MySql
+# 8080 - HTTP Nginx (only open when tests are required)
+# 465 - Email
+
+tcp_out: "20,21,22,25,53,80,110,113,443,465,3306,9418,3128"
+tcp6_out: "20,21,22,25,53,80,110,113,443,465,3306,9418,3128"
+
+
+
+#########################
+# PostgreSQL
+#########################
+
+# Basic settings
+postgresql_version: 9.5
+postgresql_encoding: 'UTF-8'
+postgresql_locale: 'en_US.UTF-8'
+postgresql_ctype: 'en_US.UTF-8'
+
+postgresql_admin_user: "postgres"
+postgresql_default_auth_method: "trust"
+
+postgresql_service_enabled: true # should the service be enabled, default is true
+
+postgresql_cluster_name: "main"
+postgresql_cluster_reset: false
+
+# List of databases to be created (optional)
+# Note: for more flexibility with extensions use the postgresql_database_extensions setting.
+postgresql_databases:
+  - name: foobar
+    owner: baz          # optional; specify the owner of the database
+    hstore: yes         # flag to install the hstore extension on this database (yes/no)
+    uuid_ossp: yes      # flag to install the uuid-ossp extension on this database (yes/no)
+    citext: yes         # flag to install the citext extension on this database (yes/no)
+    encoding: 'UTF-8'   # override global {{ postgresql_encoding }} variable per database
+    lc_collate: 'en_US.UTF-8'   # override global {{ postgresql_locale }} variable per database
+    lc_ctype: 'en_US.UTF-8'     # override global {{ postgresql_ctype }} variable per database
+
+# List of database extensions to be created (optional)
+postgresql_database_extensions:
+  - db: foobar
+    extensions:
+      - hstore
+      - citext
+
+# List of users to be created (optional)
+postgresql_users:
+  - name: baz
+    pass: pass
+    encrypted: no       # denotes if the password is already encrypted.
+
+# List of user privileges to be applied (optional)
+postgresql_user_privileges:
+  - name: baz                   # user name
+    db: foobar                  # database
+    priv: "ALL"                 # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
+    role_attr_flags: "CREATEDB" # role attribute flags

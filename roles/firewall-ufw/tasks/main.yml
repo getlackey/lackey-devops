@@ -1,0 +1,13 @@
+---
+- name: UFW | Disable and Deny all trafic
+  ufw: state=disabled policy=deny
+
+- name: UFW | Enable logging
+  ufw: logging=on
+
+- name: UFW | allow ports
+  ufw: rule=allow port={{ item }}
+  with_items: open_ports
+
+- name: UFW | Enable Firewall
+  ufw: state=enabled

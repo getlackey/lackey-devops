@@ -1,0 +1,54 @@
+---
+- name: Check if UFW is installed
+  command: dpkg-query -l ufw
+  register: deb_check
+  tags:
+    - skip_ansible_lint
+
+- name: Disable UFW if installed
+  ufw: state=disabled
+  when: deb_check.stdout.find('<none>') < 0
+  tags:
+    - skip_ansible_lint
+
+- name: Install
+  shell:
+    wget https://download.configserver.com/csf.tgz; tar -xzf csf.tgz; cd csf; sudo sh install.sh
+    creates=/etc/csf/csf.conf
+  tags:
+    - skip_ansible_lint
+
+- name: change permissions on /etc/csf
+  file: path=/etc/csf mode=0644
+
+- name: Pause before CSF conf flush
+  pause:
+    seconds: 1
+
+- name: Update Configurations
+  template:
+    src=csf.conf.j2
+    dest=/etc/csf/csf.conf
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - csf restart
+
+- name: Pause after CSF conf flush
+  pause:
+    seconds: 1
+
+- name: Upload default csf-allow-domains.deb
+  copy: src=csf-allow-domains.deb dest="/root/csf-allow-domains.deb" mode=0644
+
+- name: Install csf-allow-domains
+  apt: deb="/root/csf-allow-domains.deb"
+
+- name: Update csf-allow-domains Configurations
+  template:
+    src=csf.allow_domains.j2
+    dest=/etc/csf/csf.allow_domains
+    owner=root
+    group=root
+    mode=0644

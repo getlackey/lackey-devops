@@ -1,0 +1,4 @@
+---
+vault_example_password: "replacewithencrypted"
+vault_example_pgdb_userpassword: "replacewithencrypted"
+vault_initial_user_pass_random_seed: "replacewithencrypted"

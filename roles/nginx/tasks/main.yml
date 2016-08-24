@@ -1,0 +1,23 @@
+---
+- name: Installs nginx web server
+  apt: pkg=nginx-extras state=installed update_cache=true
+
+- name: Upload default index.html for host
+  copy: src=index.html dest=/usr/share/nginx/html/ mode=0644
+
+- name: Creates websites directory
+  file: path=/srv/websites state=directory group=webdev mode=0775
+
+- name: ACL Grant group www-data rwx
+  acl: name=/srv/websites default=yes entity=www-data etype=group permissions="rwx" state=present
+
+- name: ACL Grant group webdev rwx
+  acl: name=/srv/websites default=yes entity=webdev etype=group permissions="rwx" state=present
+
+- name: Set default nginx site configs
+  template: src=sites.available.default.j2
+    dest="/etc/nginx/sites-available/default"
+    backup=yes
+    owner=root group=root mode=0644
+  notify:
+    - restart nginx

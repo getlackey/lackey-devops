@@ -1,0 +1,28 @@
+---
+testing: 0
+
+tcp_in: "22,53,80,443,3306,5666"
+tcp6_in: "22,53,80,443,5666"
+
+# http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
+# 22 - SSH
+# 53 - DNS
+# 80 - HTTP HAProxy
+# 443 - HTTPS
+# 5666 - Nagios
+# 3306 - MySql
+# 8080 - HTTP Nginx (only open when tests are required)
+
+tcp_out: "20,21,22,25,53,80,110,113,443,9418,3128"
+tcp6_out: "20,21,22,25,53,80,110,113,443,9418,3128"
+
+#3128 - APT proxy in memset
+
+udp_in: "20,21,53"
+udp6_in: "20,21,53"
+udp_out: "20,21,53,113,123"
+udp6_out: "20,21,53,113,123"
+
+csf_allow_domains: |
+  github.com
+  bitbucket.org

@@ -1,0 +1,45 @@
+---
+- name: Add webdev group
+  group: name=webdev state=present
+
+- name: Add users
+  user:
+    name={{ item.name }}
+    createhome=yes
+    group=webdev
+    groups=sudo
+    state={{ item.state }}
+    shell=/bin/bash
+    password="{{ vault_initial_user_pass_random_seed }}" #just a random password
+  with_items: "{{ ssh_users }}"
+
+## we have changed the default umask and now ansible creates user folders with too
+## permissive settings, preventing them from using ssh
+- name: Fix Permissions
+  file: path=/home/{{ item.name }} mode=0755
+  with_items: "{{ ssh_users }}"
+
+- name: Add user ssh keys
+  authorized_key:
+    user={{ item.name }}
+    key="{{ lookup('file', item.key) }}"
+    state={{ item.key_state }}
+  with_items: "{{ ssh_users }}"
+  when: item.state == "present"
+
+- name: Set group webdev to have sudo access with nopasswd
+  copy:
+    src=webdev
+    dest=/etc/sudoers.d/webdev
+    owner=root
+    group=root
+    mode=0440
+
+- name: sshd configuration file update
+  template: src=sshd_config.j2
+    dest=/etc/ssh/sshd_config
+    backup=yes
+    owner=root group=root mode=0644
+    validate='/usr/sbin/sshd -T -f %s'
+  notify:
+    - restart sshd

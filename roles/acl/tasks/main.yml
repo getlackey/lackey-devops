@@ -1,0 +1,27 @@
+---
+- name: Update Cache
+  apt: update_cache=true
+
+- name: Install ACL
+  apt: pkg=acl state=present
+
+- name: Ensure fstab has ACL enabled for /
+  mount:
+    name: "{{ item.mount }}"
+    src: "{{ item.device }}"
+    fstype: "{{ item.fstype }}"
+    opts: "acl,{{ item.options }}"
+    state: present
+  with_items: "{{ ansible_mounts }}"
+  when: item.mount == '/' and item.options.find("acl") == -1
+
+- name: Re-mount /
+  command: sudo mount / -o remount
+  tags:
+    - skip_ansible_lint
+
+- name: Fix default umask
+  template: src=etc/login.defs.j2
+    dest="/etc/login.defs"
+    backup=yes
+    owner=root group=root mode=0644

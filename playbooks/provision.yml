@@ -1,0 +1,44 @@
+---
+# Playbook to provision server with each of these roles
+- hosts: all
+  become: yes
+  vars_files:
+        - "../host_vars/main.yml"
+        - "../group_vars/main.yml"
+        - "../group_vars/vault"
+  roles:
+    - role: users
+      tags:
+        - users
+
+    - role: common
+      tags:
+        - common
+
+    - role: firewall-csf
+      tags:
+        - firewall
+
+    - role: acl
+      tags:
+        - acl
+
+    - role: docker
+      tags:
+        - docker
+
+    - role: nginx
+      tags:
+        - nginx
+
+    - role: nodejs
+      tags:
+        - nodejs
+
+    - role: postgresql
+      tags:
+        - postgresql
+
+    - role: ntp
+      tags:
+        - ntp

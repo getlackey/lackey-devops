@@ -1,0 +1,18 @@
+---
+- name: Update Cache
+  apt: update_cache=true
+
+- name: Install common packages
+  apt: pkg={{ item }} state=present
+  with_items:
+    - build-essential
+    - bundler
+    - htop
+    - iotop
+    - nano
+    - curl
+    - git
+    - python-pip
+    - apache2-utils
+    - libssh2-1-dev
+    - nscd

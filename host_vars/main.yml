@@ -1,0 +1,14 @@
+---
+
+###
+# manage users in this file
+# changing key_state from "present" to "absent"
+# disables ssh access in that box
+
+ssh_users:
+  - name: tmct
+    group: webdev
+    groups: sudo
+    key: 'rob-20160509.pub'
+    state: present
+    key_state: present

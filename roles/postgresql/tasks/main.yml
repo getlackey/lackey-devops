@@ -1,0 +1,43 @@
+# file: postgresql/tasks/main.yml
+
+- name: PostgreSQL include vars
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "../vars/{{ ansible_os_family }}.yml"
+    - "../vars/empty.yml"
+  tags: [always]
+
+- name: PostgreSQL include install.yml
+  include: install.yml
+  when: ansible_pkg_mgr == "apt"
+  tags: [postgresql, postgresql-install]
+
+- name: PostgreSQL include install_yum.yml
+  include: install_yum.yml
+  when: ansible_pkg_mgr == "yum"
+  tags: [postgresql, postgresql-install]
+
+- name: PostgreSQL include extensions.yml
+  include: extensions.yml
+  tags: [postgresql, postgresql-extensions]
+
+- name: PostgreSQL include configure.yml
+  include: configure.yml
+  tags: [postgresql, postgresql-configure]
+
+- name: PostgreSQL include users.yml
+  include: users.yml
+  tags: [postgresql, postgresql-users]
+
+- name: PostgreSQL include databases.yml
+  include: databases.yml
+  tags: [postgresql, postgresql-databases]
+
+- name: PostgreSQL include users_privileges.yml
+  include: users_privileges.yml
+  tags: [postgresql, postgresql-users]
+
+- name: PostgreSQL include monit.yml
+  include: monit.yml
+  when: monit_protection is defined and monit_protection == true
+  tags: [postgresql, postgresql-monit]
