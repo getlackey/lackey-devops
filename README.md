@@ -1,3 +1,7 @@
+
+
+![Travis Status for Lackey](https://travis-ci.org/getlackey/lackey-devops.svg?branch=master)
+ 
 ### About
 
 N.B The Lackey Docker image is under development and not ready for production yet but check back soon. In the future this will be the recommended installation option as we evolve.
