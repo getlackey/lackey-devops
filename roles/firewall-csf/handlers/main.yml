@@ -1,6 +1,6 @@
 ---
 - name: csf restart
   shell: csf -r > /dev/null
-  
+
 - name: Restart iptables
   service: name=iptables state=restarted

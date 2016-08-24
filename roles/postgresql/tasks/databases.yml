@@ -5,11 +5,11 @@
     name: "{{ postgresql_service_name }}"
     state: started
 
-- name: PostgreSQL | Restart PostgreSQL 
+- name: PostgreSQL | Restart PostgreSQL
   service:
     name: "{{ postgresql_service_name }}"
     state: restarted
-    
+
 - name: PostgreSQL | Make sure the PostgreSQL databases are present
   postgresql_db:
     name: "{{item.name}}"
