@@ -28,8 +28,10 @@ Setup the project with these commands in Mac Terminal:
 Install a local Python environment to run Ansible from:
 
     virtualenv -p /usr/bin/python2.7 venv
-    echo "# Add Ansible Vault Password" >> venv/bin/activate 
-    echo "ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass.txt" >> venv/bin/activate 
+    echo "# Settings for your specific dev machine (affected file is in venv which is under .gitignore) for Ansible Vault Password file path and Ansible Roles path" >> venv/bin/activate
+    echo "ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass.txt" >> venv/bin/activate
+    echo "ANSIBLE_ROLES_PATH=$(pwd)/roles" >> venv/bin/activate
+    echo "ANSIBLE_NOCOWS=1" >> venv/bin/activate
     source venv/bin/activate
     pip install ansible ansible-lint
 
@@ -46,7 +48,7 @@ Install any gems you need:
 
 N.B Not mandatory but this allows you to use the [.travis.yml command line linter](https://docs.travis-ci.com/user/travis-lint) via:
 
-    travis lint .travis.yml    
+    travis lint .travis.yml
 
 Install this vagrant plugin:
 
