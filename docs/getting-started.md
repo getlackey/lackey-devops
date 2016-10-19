@@ -22,8 +22,13 @@ Setup the project with these commands in Mac Terminal:
 
     mkdir ~/dev
     cd ~/dev
-    git clone git@github.com:getlackey/lackey_docker.git
-    cd lackey_docker
+    git clone git@github.com:getlackey/lackey-devops.git
+    cd lackey-devops
+
+You'll need virtualenv installed and pip if you haven't already got them:
+
+    sudo easy_install pip
+    sudo pip install virtualenv
     
 Install a local Python environment to run Ansible from:
 
